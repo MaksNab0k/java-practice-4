@@ -12,7 +12,15 @@ public class BookTest {
      */
     @Test
     public void shouldThrowExceptionWhenInvalidPriceInSetter() {
-        Book book = new Book("Kobzar", "Taras Shevchenko", 1840, 250.0, 300);
+        Book book = new Book(
+                "Kobzar",
+                "Taras Shevchenko",
+                1840,
+                250.0,
+                300,
+                BookGenre.NOVEL,
+                new Publisher("Osnova")
+        );
 
         assertThrows(IllegalArgumentException.class, () -> {
             book.setPrice(-10.0);
@@ -25,7 +33,15 @@ public class BookTest {
     @Test
     public void shouldThrowExceptionWhenInvalidConstructorData() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Book("", "Author", 2020, 100.0, 200);
+            new Book(
+                    "",
+                    "Author",
+                    2020,
+                    100.0,
+                    200,
+                    BookGenre.SCIENCE,
+                    new Publisher("Ranok")
+            );
         });
     }
 
@@ -34,7 +50,15 @@ public class BookTest {
      */
     @Test
     public void shouldThrowExceptionWhenInvalidPagesInSetter() {
-        Book book = new Book("Valid title", "Valid author", 2020, 100.0, 200);
+        Book book = new Book(
+                "Valid title",
+                "Valid author",
+                2020,
+                100.0,
+                200,
+                BookGenre.FANTASY,
+                new Publisher("Valid publisher")
+        );
 
         assertThrows(IllegalArgumentException.class, () -> {
             book.setPages(0);
