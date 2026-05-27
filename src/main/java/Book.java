@@ -1,9 +1,7 @@
 /**
- * Клас Book описує книгу з базовими характеристиками.
+ * Базовий клас Book описує книгу в бібліотеці.
  */
 public class Book {
-
-    private static int objectCount = 0;
 
     private String title;
     private String author;
@@ -11,7 +9,6 @@ public class Book {
     private double price;
     private int pages;
     private BookGenre genre;
-    private Publisher publisher;
 
     /**
      * Створює об'єкт книги.
@@ -22,7 +19,6 @@ public class Book {
      * @param price ціна книги
      * @param pages кількість сторінок
      * @param genre жанр книги
-     * @param publisher видавництво книги
      */
     public Book(
             String title,
@@ -30,8 +26,7 @@ public class Book {
             int year,
             double price,
             int pages,
-            BookGenre genre,
-            Publisher publisher
+            BookGenre genre
     ) {
         setTitle(title);
         setAuthor(author);
@@ -39,15 +34,12 @@ public class Book {
         setPrice(price);
         setPages(pages);
         setGenre(genre);
-        setPublisher(publisher);
-
-        objectCount++;
     }
 
     /**
      * Конструктор копіювання.
      *
-     * @param other книга, яку потрібно скопіювати
+     * @param other книга для копіювання
      */
     public Book(Book other) {
         if (other == null) {
@@ -60,18 +52,6 @@ public class Book {
         setPrice(other.price);
         setPages(other.pages);
         setGenre(other.genre);
-        setPublisher(other.publisher);
-
-        objectCount++;
-    }
-
-    /**
-     * Повертає кількість створених об'єктів Book.
-     *
-     * @return кількість створених книг
-     */
-    public static int getObjectCount() {
-        return objectCount;
     }
 
     /**
@@ -195,26 +175,6 @@ public class Book {
     }
 
     /**
-     * @return видавництво книги
-     */
-    public Publisher getPublisher() {
-        return publisher;
-    }
-
-    /**
-     * Встановлює видавництво книги.
-     *
-     * @param publisher видавництво книги
-     */
-    public void setPublisher(Publisher publisher) {
-        if (publisher == null) {
-            throw new IllegalArgumentException("Видавництво не може бути null.");
-        }
-
-        this.publisher = publisher;
-    }
-
-    /**
      * Формує текстову інформацію про книгу.
      *
      * @return інформація про книгу
@@ -228,7 +188,6 @@ public class Book {
                 ", price=" + price +
                 ", pages=" + pages +
                 ", genre=" + genre +
-                ", publisher=" + publisher +
                 '}';
     }
 
@@ -255,7 +214,6 @@ public class Book {
                 && pages == book.pages
                 && title.equals(book.title)
                 && author.equals(book.author)
-                && genre == book.genre
-                && publisher.equals(book.publisher);
+                && genre == book.genre;
     }
 }
