@@ -3,241 +3,188 @@ import java.util.Scanner;
 
 /**
  * Головний клас програми.
- * Реалізує консольне меню для роботи з книгами.
  */
 public class Main {
 
-    /**
-     * Головний метод запуску програми.
-     *
-     * @param args аргументи командного рядка
-     */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Book> books = new ArrayList<Book>();
 
-        printHeader();
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Book> books = new ArrayList<Book>();
 
         boolean running = true;
 
         while (running) {
-            printMenu();
 
-            int choice = readInt(scanner, "Ваш вибір: ");
+            System.out.println("\n=== МЕНЮ ===");
+            System.out.println("1. Додати Book");
+            System.out.println("2. Додати EBook");
+            System.out.println("3. Додати PaperBook");
+            System.out.println("4. Показати всі книги");
+            System.out.println("5. Вихід");
+
+            int choice = readInt(scanner);
 
             switch (choice) {
+
                 case 1:
-                    createBook(scanner, books);
+                    books.add(createBook(scanner));
                     break;
 
                 case 2:
-                    printBooks(books);
+                    books.add(createEBook(scanner));
                     break;
 
                 case 3:
-                    copyFirstBook(books);
+                    books.add(createPaperBook(scanner));
                     break;
 
                 case 4:
-                    System.out.println("Кількість створених книг: " + Book.getObjectCount());
+
+                    if (books.isEmpty()) {
+                        System.out.println("Список порожній.");
+                    }
+
+                    for (Book book : books) {
+                        System.out.println(book);
+                    }
+
                     break;
 
                 case 5:
                     running = false;
-                    System.out.println("Роботу завершено.");
                     break;
 
                 default:
-                    System.out.println("Невірний пункт меню.");
-                    break;
+                    System.out.println("Невірний пункт.");
             }
         }
 
         scanner.close();
     }
 
-    /**
-     * Виводить інформаційну шапку програми.
-     */
-    public static void printHeader() {
-        System.out.println("Практична робота №6");
-        System.out.println("Класи, статичні члени, агрегація, enum");
-        System.out.println("Предметна область: книги");
+    public static Book createBook(Scanner scanner) {
+
+        return new Book(
+                readString(scanner, "Назва: "),
+                readString(scanner, "Автор: "),
+                readInt(scanner, "Рік: "),
+                readDouble(scanner, "Ціна: "),
+                readInt(scanner, "Сторінки: "),
+                BookGenre.NOVEL
+        );
     }
 
-    /**
-     * Виводить меню програми.
-     */
-    public static void printMenu() {
-        System.out.println();
-        System.out.println("1. Створити новий об'єкт");
-        System.out.println("2. Вивести всі об'єкти");
-        System.out.println("3. Створити копію першої книги");
-        System.out.println("4. Показати кількість створених книг");
-        System.out.println("5. Завершити роботу");
+    public static EBook createEBook(
+            Scanner scanner
+    ) {
+
+        return new EBook(
+                readString(scanner, "Назва: "),
+                readString(scanner, "Автор: "),
+                readInt(scanner, "Рік: "),
+                readDouble(scanner, "Ціна: "),
+                readInt(scanner, "Сторінки: "),
+                BookGenre.SCIENCE,
+                readDouble(scanner, "Розмір файлу MB: ")
+        );
     }
 
-    /**
-     * Створює нову книгу.
-     *
-     * @param scanner об'єкт Scanner
-     * @param books список книг
-     */
-    public static void createBook(Scanner scanner, ArrayList<Book> books) {
-        try {
-            String title = readString(scanner, "Назва книги: ");
-            String author = readString(scanner, "Автор книги: ");
-            int year = readInt(scanner, "Рік видання: ");
-            double price = readDouble(scanner, "Ціна книги: ");
-            int pages = readInt(scanner, "Кількість сторінок: ");
+    public static PaperBook createPaperBook(
+            Scanner scanner
+    ) {
 
-            BookGenre genre = readGenre(scanner);
+        return new PaperBook(
+                readString(scanner, "Назва: "),
+                readString(scanner, "Автор: "),
+                readInt(scanner, "Рік: "),
+                readDouble(scanner, "Ціна: "),
+                readInt(scanner, "Сторінки: "),
+                BookGenre.FANTASY,
+                readString(scanner, "Тип обкладинки: ")
+        );
+    }
 
-            String publisherName = readString(scanner, "Назва видавництва: ");
-            Publisher publisher = new Publisher(publisherName);
+    public static String readString(
+            Scanner scanner,
+            String text
+    ) {
 
-            Book book = new Book(
-                    title,
-                    author,
-                    year,
-                    price,
-                    pages,
-                    genre,
-                    publisher
+        while (true) {
+
+            System.out.print(text);
+
+            String value =
+                    scanner.nextLine();
+
+            if (!value.trim().isEmpty()) {
+                return value;
+            }
+
+            System.out.println(
+                    "Поле не може бути порожнім."
             );
-
-            books.add(book);
-
-            System.out.println("Книгу успішно додано.");
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Помилка: " + e.getMessage());
         }
     }
 
-    /**
-     * Виводить усі книги.
-     *
-     * @param books список книг
-     */
-    public static void printBooks(ArrayList<Book> books) {
-        if (books.isEmpty()) {
-            System.out.println("Список книг порожній.");
-            return;
-        }
+    public static int readInt(
+            Scanner scanner
+    ) {
 
-        for (int i = 0; i < books.size(); i++) {
-            System.out.println((i + 1) + ". " + books.get(i));
-        }
+        return readInt(
+                scanner,
+                "Введіть число: "
+        );
     }
 
-    /**
-     * Створює копію першої книги.
-     *
-     * @param books список книг
-     */
-    public static void copyFirstBook(ArrayList<Book> books) {
-        if (books.isEmpty()) {
-            System.out.println("Немає книги для копіювання.");
-            return;
-        }
+    public static int readInt(
+            Scanner scanner,
+            String text
+    ) {
 
-        Book copiedBook = new Book(books.get(0));
-        books.add(copiedBook);
-
-        System.out.println("Копію першої книги створено.");
-    }
-
-    /**
-     * Зчитує непорожній рядок.
-     *
-     * @param scanner об'єкт Scanner
-     * @param message повідомлення
-     * @return введений рядок
-     */
-    public static String readString(Scanner scanner, String message) {
-        String value;
-
-        do {
-            System.out.print(message);
-            value = scanner.nextLine();
-
-            if (value.trim().isEmpty()) {
-                System.out.println("Помилка: рядок не може бути порожнім.");
-            }
-
-        } while (value.trim().isEmpty());
-
-        return value;
-    }
-
-    /**
-     * Зчитує ціле число.
-     *
-     * @param scanner об'єкт Scanner
-     * @param message повідомлення
-     * @return ціле число
-     */
-    public static int readInt(Scanner scanner, String message) {
         while (true) {
+
             try {
-                System.out.print(message);
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Помилка: потрібно ввести ціле число.");
+
+                System.out.print(text);
+
+                return Integer.parseInt(
+                        scanner.nextLine()
+                );
+
+            } catch (
+                    NumberFormatException e
+            ) {
+
+                System.out.println(
+                        "Некоректне число."
+                );
             }
         }
     }
 
-    /**
-     * Зчитує дійсне число.
-     *
-     * @param scanner об'єкт Scanner
-     * @param message повідомлення
-     * @return дійсне число
-     */
-    public static double readDouble(Scanner scanner, String message) {
+    public static double readDouble(
+            Scanner scanner,
+            String text
+    ) {
+
         while (true) {
+
             try {
-                System.out.print(message);
-                return Double.parseDouble(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Помилка: потрібно ввести число.");
-            }
-        }
-    }
 
-    /**
-     * Зчитує жанр книги.
-     *
-     * @param scanner об'єкт Scanner
-     * @return жанр книги
-     */
-    public static BookGenre readGenre(Scanner scanner) {
-        while (true) {
-            System.out.println("Оберіть жанр:");
-            System.out.println("1. FANTASY");
-            System.out.println("2. SCIENCE");
-            System.out.println("3. NOVEL");
-            System.out.println("4. DETECTIVE");
-            System.out.println("5. HORROR");
+                System.out.print(text);
 
-            int choice = readInt(scanner, "Ваш вибір жанру: ");
+                return Double.parseDouble(
+                        scanner.nextLine()
+                );
 
-            switch (choice) {
-                case 1:
-                    return BookGenre.FANTASY;
-                case 2:
-                    return BookGenre.SCIENCE;
-                case 3:
-                    return BookGenre.NOVEL;
-                case 4:
-                    return BookGenre.DETECTIVE;
-                case 5:
-                    return BookGenre.HORROR;
-                default:
-                    System.out.println("Помилка: такого жанру немає.");
-                    break;
+            } catch (
+                    NumberFormatException e
+            ) {
+
+                System.out.println(
+                        "Некоректне число."
+                );
             }
         }
     }

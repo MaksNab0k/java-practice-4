@@ -3,65 +3,59 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Клас тестів для перевірки валідації Book.
+ * Тести для Book.
  */
 public class BookTest {
 
-    /**
-     * Перевіряє кидання винятку при некоректній ціні у сеттері.
-     */
     @Test
     public void shouldThrowExceptionWhenInvalidPriceInSetter() {
+
         Book book = new Book(
                 "Kobzar",
                 "Taras Shevchenko",
                 1840,
-                250.0,
+                250,
                 300,
-                BookGenre.NOVEL,
-                new Publisher("Osnova")
+                BookGenre.NOVEL
         );
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            book.setPrice(-10.0);
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> book.setPrice(-10)
+        );
     }
 
-    /**
-     * Перевіряє кидання винятку при некоректних параметрах конструктора.
-     */
     @Test
     public void shouldThrowExceptionWhenInvalidConstructorData() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Book(
-                    "",
-                    "Author",
-                    2020,
-                    100.0,
-                    200,
-                    BookGenre.SCIENCE,
-                    new Publisher("Ranok")
-            );
-        });
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Book(
+                        "",
+                        "Author",
+                        2020,
+                        100,
+                        200,
+                        BookGenre.FANTASY
+                )
+        );
     }
 
-    /**
-     * Перевіряє кидання винятку при некоректній кількості сторінок.
-     */
     @Test
     public void shouldThrowExceptionWhenInvalidPagesInSetter() {
+
         Book book = new Book(
-                "Valid title",
-                "Valid author",
+                "Valid",
+                "Author",
                 2020,
-                100.0,
+                100,
                 200,
-                BookGenre.FANTASY,
-                new Publisher("Valid publisher")
+                BookGenre.SCIENCE
         );
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            book.setPages(0);
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> book.setPages(0)
+        );
     }
 }
